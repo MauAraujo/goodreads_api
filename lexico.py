@@ -106,10 +106,9 @@ def main():
     id = get_book_id()
     widget = get_book_widget(id)
     reviews = get_book_reviews(widget)
-    soup = BeautifulSoup(reviews[4], 'xml')
-    # print(soup.prettify())
-    # print(reviews)
-    tokeneize(str(reviews[2]))
+    raw = BeautifulSoup(str(reviews[4]), 'xml')
+    print(raw.get_text())
+    tokeneize(raw.get_text())
 
 
 if __name__ == "__main__":
