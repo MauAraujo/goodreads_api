@@ -2,6 +2,13 @@ import ply.lex as lex
 from bs4 import BeautifulSoup
 import requests
 import sys
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+# STOPWORDS
+
+stop_words = set(stopwords.words('english'))
 
 # API
 title = sys.argv[1]
@@ -69,12 +76,14 @@ lexer = lex.lex()
 def tokeneize(inp):
     # file = open("ejemplo.txt", "r")
     # lexer.input(file.read())
-    lexer.input(inp)
+    lexer.input(inp.lower())
     while True:
         tok = lexer.token()
         if not tok:
             break      # No more input
-        print(str(tok.value) + " : " + tok.type + " Linea: " + str(tok.lineno))
+        if tok.value not in stop_words:
+            # print("STOPWORD")
+            print(str(tok.value) + " \t: " + tok.type + " \tLinea: " + str(tok.lineno))
     # file.close()
 
 
