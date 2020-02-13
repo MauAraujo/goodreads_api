@@ -81,9 +81,10 @@ def tokeneize(inp):
         tok = lexer.token()
         if not tok:
             break      # No more input
-        if tok.value not in stop_words:
-            # print("STOPWORD")
-            print(str(tok.value) + " \t: " + tok.type + " \tLinea: " + str(tok.lineno))
+        if tok.value in stop_words:
+            print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
+        else:
+            print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
     # file.close()
 
 
@@ -115,9 +116,16 @@ def main():
     id = get_book_id()
     widget = get_book_widget(id)
     reviews = get_book_reviews(widget)
-    raw = BeautifulSoup(str(reviews[4]), 'xml')
+    raw = BeautifulSoup(str(reviews[5]), 'xml')
     print(raw.get_text())
     tokeneize(raw.get_text())
+    print("""
+    Carmen Robles
+    Alberto Calleja
+    Felipe Enriquez
+    Mauricio Araujo
+    Noe Osorio
+    """)
 
 
 if __name__ == "__main__":
