@@ -67,35 +67,27 @@ def t_error(t):
 lexer = lex.lex()
 
 
-
-
-# Give the lexer some input
-# lexer.input(data)
-# lexer.input(file.read())
-
 # Tokenize
 
 
 def tokeneize(inp):
-    # file = open("ejemplo.txt", "r")
-    # lexer.input(file.read())
     lexer.input(inp.lower())
-    while True:
-        tok = lexer.token()
+
+    for index in range(0,lexer.lexlen):
         try:
+            tok = lexer.token()
             if tok.type != "PUNCTUATION":
                 tok.type = tag(str(tok.value))
             if not tok:
                 break      # No more input
             if tok.value not in stop_words:
-                print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
+                print("{} : {} => Linea {}".format(str(tok.value), tok.type, str(tok.lineno)))
+                # print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
             # else:
                 # print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
         except AttributeError:
             # print("Error en atributo de {} : {}".format(tok.value, tok.type))
             pass
-        
-    # file.close()
 
 
 def get_book_id():
@@ -136,11 +128,6 @@ def main():
     Mauricio Araujo
     Noe Osorio
     """)
-    # brown_news_tagged = brown.tagged_words(categories='news', tagset='universal')
-    # data = nltk.ConditionalFreqDist((word.lower(), tag))
-    # tags = [tag for (tag, _) in data[word].most_common()]
-    # print(word, ' '.join(tags))
-
 
 if __name__ == "__main__":
     main()
