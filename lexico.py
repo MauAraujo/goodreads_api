@@ -3,8 +3,11 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import nltk
-nltk.download('stopwords')
+# nltk.download('stopwords')
 from nltk.corpus import stopwords
+from nltk.corpus import brown
+
+from tokenWords import tag
 
 # STOPWORDS
 
@@ -79,12 +82,19 @@ def tokeneize(inp):
     lexer.input(inp.lower())
     while True:
         tok = lexer.token()
-        if not tok:
-            break      # No more input
-        if tok.value in stop_words:
-            print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
-        else:
-            print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
+        try:
+            if tok.type != "PUNCTUATION":
+                tok.type = tag(str(tok.value))
+            if not tok:
+                break      # No more input
+            if tok.value not in stop_words:
+                print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
+            # else:
+                # print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
+        except AttributeError:
+            # print("Error en atributo de {} : {}".format(tok.value, tok.type))
+            pass
+        
     # file.close()
 
 
@@ -126,6 +136,10 @@ def main():
     Mauricio Araujo
     Noe Osorio
     """)
+    # brown_news_tagged = brown.tagged_words(categories='news', tagset='universal')
+    # data = nltk.ConditionalFreqDist((word.lower(), tag))
+    # tags = [tag for (tag, _) in data[word].most_common()]
+    # print(word, ' '.join(tags))
 
 
 if __name__ == "__main__":
