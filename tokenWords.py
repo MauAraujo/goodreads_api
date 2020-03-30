@@ -29,10 +29,10 @@ def tag(word):
         
     
 
-word = "."
-tagged = nltk.pos_tag([word], tagset="universal", lang="eng")   
-x, y = tagged[0]
-print("{} is {}".format(x,y))
+# word = "."
+# tagged = nltk.pos_tag([word], tagset="universal", lang="eng")   
+# x, y = tagged[0]
+# print("{} is {}".format(x,y))
 
 # tokenized = sent_tokenize(txt) 
 # for i in tokenized: 
@@ -40,6 +40,7 @@ print("{} is {}".format(x,y))
 #     # Word tokenizers is used to find the words  
 #     # and punctuation in a string 
 #     wordsList = nltk.word_tokenize(i) 
+
   
 #     # removing stop words from wordList 
 #     wordsList = [w for w in wordsList if not w in stop_words]  
@@ -49,5 +50,11 @@ print("{} is {}".format(x,y))
 #     print("\n")
 #     print(wordsList)
 #     tagged = nltk.pos_tag(wordsList, tagset="universal", lang="eng") 
+#     for index, (x,y) in enumerate(tagged):
+#         if y == '.':
+#             print(y)
+#             y = "PUNTUATION"
+#             tagged[index] = (x,y)
+
   
 #     print(tagged) 

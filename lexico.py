@@ -6,7 +6,6 @@ import nltk
 # nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.corpus import brown
-
 from tokenWords import tag
 
 # STOPWORDS
