@@ -7,10 +7,15 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.corpus import brown
 from tokenWords import tag
+from nltk.stem import PorterStemmer 
 
+# INIT-----------
 # STOPWORDS
 
 stop_words = set(stopwords.words('english'))
+dbToken = list()
+userTokens = list()
+ps = PorterStemmer() 
 
 # API
 title = sys.argv[1]
@@ -61,18 +66,23 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-
-
 lexer = lex.lex()
 
 
 # Tokenize
+def stemming(input):
+    stem = ''
+    try:
+        stem = ps.stem(input.value)
+    except :
+        stem = ps.stem(input)
+    return stem
 
 
 def tokeneize(inp):
     lexer.input(inp.lower())
-
-    for index in range(0,lexer.lexlen):
+    tokenList = list()
+    for index in range(0, lexer.lexlen):
         try:
             tok = lexer.token()
             if tok.type != "PUNCTUATION":
@@ -80,13 +90,91 @@ def tokeneize(inp):
             if not tok:
                 break      # No more input
             if tok.value not in stop_words:
-                print("{} : {} => Linea {}".format(str(tok.value), tok.type, str(tok.lineno)))
-                # print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
-            # else:
-                # print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
+                tok.value = stemming(tok.value)
+                tokenList.append(tok)
+                # print("{} : {} => Linea {}".format(
+                #     str(tok.value), tok.type, str(tok.lineno)))
+           
         except AttributeError:
-            # print("Error en atributo de {} : {}".format(tok.value, tok.type))
+           
             pass
+    return tokenList
+
+
+def get_user_tokens(input):
+    for token in tokeneize(input):
+        contains = findToken(token, userTokens)
+        if((type(contains) != int)):
+            userTokens.append({
+                "value": token.value,
+                "count": 1,
+                "type": token.type,
+                "page": token.lineno,
+            })
+        else:
+            try:
+                # print("Ya estaba")
+                # print(userTokens[contains])
+                userTokens[contains]["count"] += 1
+                pass
+            except ValueError:
+                print("No exite, no hay")
+                pass
+
+    print(userTokens)
+    return 
+
+def get_books_tokens(input):
+    for token in tokeneize(input):
+        contains = findToken(token, dbToken)
+        if((type(contains) != int)):
+            dbToken.append({
+                "value": token.value,
+                "count": 1,
+                "type": token.type,
+                "page": token.lineno,
+            })
+        else:
+            try:
+                # print("Ya estaba")
+                # print(dbToken[contains])
+                dbToken[contains]["count"] += 1
+                pass
+            except ValueError:
+                print("No exite, no hay")
+                pass
+
+    print(dbToken)
+    return []    
+
+def compareIndexers(indx1, indx2):
+    empate = list()
+    for token in indx1:
+        contains = findToken(token, indx2)
+        if((type(contains) != int)):
+            pass
+        else:
+            empate.append(token)
+            # print("Token empatado {}".format(token["value"]))
+    return empate
+def findToken(token, token_list):
+    contains = False
+    for (index, t) in enumerate(token_list):
+        # print(index)
+        # print(token.value)
+        # print(t["value"])
+        try:
+            if(token.value == t["value"]):
+                # print("Contiene")
+                contains = index
+                break
+        except AttributeError:
+            if(token["value"] == t["value"]):
+                # print("Contiene")
+                contains = index
+                break    
+    # print(contains)
+    return contains
 
 
 def get_book_id():
@@ -119,7 +207,11 @@ def main():
     reviews = get_book_reviews(widget)
     raw = BeautifulSoup(str(reviews[5]), 'xml')
     print(raw.get_text())
-    tokeneize(raw.get_text())
+    # tokeneize(raw.get_text())
+    get_books_tokens(raw.get_text())
+    get_user_tokens(sys.argv[2])
+    print(compareIndexers( dbToken, userTokens))
+
     print("""
     Carmen Robles
     Alberto Calleja
@@ -127,6 +219,7 @@ def main():
     Mauricio Araujo
     Noe Osorio
     """)
+
 
 if __name__ == "__main__":
     main()
