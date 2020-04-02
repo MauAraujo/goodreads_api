@@ -20,28 +20,20 @@ array2 = [{'value': 'behind', 'count': 1, 'type': 'ADP', 'page': 4}, {'value': '
 
 
 def add_tokens(book, tokenLists):
-    doc_ref = db.collection(u'tokens').document()
-    doc_ref.set(
-        {"book": book["name"], "tokenListCount": len(tokenLists)}, merge=True)
-    for (index, tokenList) in enumerate(tokenLists):
-        doc_ref.set({str(index): tokenList}, merge=True)
+
+        doc_ref = db.collection(u'tokens').document()
+        doc_ref.set(book, merge=True)
+        for (index, tokenList) in enumerate(tokenLists):
+            if(len(tokenList)):
+                doc_ref.set({str(index): tokenList}, merge=True)
 
 
-def get_indexer():
+def get_docs():
     users_ref = db.collection(u'tokens')
     docs = users_ref.stream()
     indexer = list()
-
-    for doc in docs:
-        data = doc.to_dict()
-
-        print(data["book"])
-        for i in range(0, data["tokenListCount"]):
-            if(data[str(i)]):
-                for token in data[str(i)]:
-                    tokens.append(token)
-        print(tokens)
-        print(u'{} => {}'.format(doc.id, data["book"]))
+    return docs
+   
 
 
 def concat(arr1, arr2):
@@ -50,8 +42,9 @@ def concat(arr1, arr2):
 
 
 def main():
-    add_tokens([array, array2])
-    get_indexer()
+    # add_tokens([array, array2])
+    # get_indexer()
+    print("")
 
 
 if __name__ == "__main__":
