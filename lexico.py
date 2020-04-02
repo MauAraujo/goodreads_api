@@ -12,6 +12,7 @@ from nltk.corpus import brown
 from tokenWords import tag
 from nltk.stem import PorterStemmer
 from api import *
+from textTest import test
 
 # INIT-----------
 # STOPWORDS
@@ -66,7 +67,7 @@ t_ignore = ' \t'
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    # print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 
@@ -105,7 +106,7 @@ def tokeneize(inp):
     return tokenList
 
 
-def get_user_tokens(input):
+def get_user_tokens(input, log = False):
     userTokens = list()
     for token in tokeneize(input):
         contains = find_token(token, userTokens)
@@ -126,13 +127,20 @@ def get_user_tokens(input):
                 print("No exite, no hay")
                 pass
 
-    # print(userTokens)
+    if(log):
+        print("\nIndexador del input de usuario:")
+        for word in userTokens:
+            print(word)
+        print("\n")
     return userTokens
 
 
-def get_books_tokens(input):
+def get_books_tokens(input, log= False):
+    # print(input)
     dbToken = list()
+    # print(tokeneize(input))
     for token in tokeneize(input):
+
         contains = find_token(token, dbToken)
         if((type(contains) != int)):
             dbToken.append({
@@ -150,35 +158,37 @@ def get_books_tokens(input):
             except ValueError:
                 print("No exite, no hay")
                 pass
-
-    # print(dbToken)
+    if(log):
+        print("\nIndexador del texto:")
+        print(dbToken)
+        print("\n")
     return dbToken
 
 
-def get_book_indexer(lista):
-    dbToken = list()
-    for token in tokeneize(lista):
-        contains = find_token(token, dbToken)
-        if((type(contains) != int)):
-            dbToken.append({
-                "value": token.value,
-                "count": 1,
-                "type": token.type,
-                "page": token.lineno,
-                "books": []
-            })
-        else:
-            try:
-                # print("Ya estaba")
-                # print(dbToken[contains])
-                dbToken[contains]["count"] += 1
-                pass
-            except ValueError:
-                print("No exite, no hay")
-                pass
+# def get_book_indexer(lista):
+#     dbToken = list()
+#     for token in tokeneize(lista):
+#         contains = find_token(token, dbToken)
+#         if((type(contains) != int)):
+#             dbToken.append({
+#                 "value": token.value,
+#                 "count": 1,
+#                 "type": token.type,
+#                 "page": token.lineno,
+#                 "books": []
+#             })
+#         else:
+#             try:
+#                 # print("Ya estaba")
+#                 # print(dbToken[contains])
+#                 dbToken[contains]["count"] += 1
+#                 pass
+#             except ValueError:
+#                 print("No exite, no hay")
+#                 pass
 
-    # print(dbToken)
-    return dbToken
+#     # print(dbToken)
+#     return dbToken
 
 
 def compareIndexers(indx1, indx2):
@@ -385,23 +395,29 @@ def print_books(books):
 def main():
     # Build the lexer
     lexer = lex.lex()
-    # If you need to upload some data, uncomment line below
-    # upload_book_tokens("most")
-    # upload_book_tokens("10most") #Este va a tardar mucho porque son muchos libros que tiene que subir
-    # First we build our indexer from DB
-    indexer = build_book_indexer()
-    print("Indexer ready")
-    # Then we process the input from user and make it a token array
-    userTokens = get_user_tokens(sys.argv[1])
-    print("Input analizado")
-    # Finally we just search for each user token on aour indexer
-    # we return a list of books that fits better for user
-    # (that contains more words the user said)
+    if(len(sys.argv) > 2):
+        userTokens = get_user_tokens(sys.argv[1], log= True)
+        indexer = get_books_tokens(test, log = True)
+        print(compareIndexers(userTokens, indexer))
 
-    books = get_books_from_indexer(userTokens, indexer)
-    books.sort(key = sortBook, reverse = True)
-    print("Books")
-    print_books(books)
+    else:
+        # If you need to upload some data, uncomment line below
+        # upload_book_tokens("most")
+        # upload_book_tokens("10most") #Este va a tardar mucho porque son muchos libros que tiene que subir
+        # First we build our indexer from DB
+        indexer = build_book_indexer()
+        print("Indexer ready")
+        # Then we process the input from user and make it a token array
+        userTokens = get_user_tokens(sys.argv[1])
+        print("Input analyzed")
+        # Finally we just search for each user token on aour indexer
+        # we return a list of books that fits better for user
+        # (that contains more words the user said)
+
+        books = get_books_from_indexer(userTokens, indexer)
+        books.sort(key = sortBook, reverse = True)
+        print("Books")
+        print_books(books)
 
     print("""
     Carmen Robles
