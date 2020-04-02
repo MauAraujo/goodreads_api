@@ -1,6 +1,9 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from lexico import find_token
+
+
 
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
@@ -16,7 +19,7 @@ array2 = [{'value': 'behind', 'count': 1, 'type': 'ADP', 'page': 4}, {'value': '
 # Read
 
 
-def addToken(book, tokenLists):
+def add_tokens(book, tokenLists):
     doc_ref = db.collection(u'tokens').document()
     doc_ref.set(
         {"book": book["name"], "tokenListCount": len(tokenLists)}, merge=True)
@@ -24,10 +27,10 @@ def addToken(book, tokenLists):
         doc_ref.set({str(index): tokenList}, merge=True)
 
 
-def readTokens():
+def get_indexer():
     users_ref = db.collection(u'tokens')
     docs = users_ref.stream()
-    tokens = list()
+    indexer = list()
 
     for doc in docs:
         data = doc.to_dict()
@@ -39,7 +42,7 @@ def readTokens():
                     tokens.append(token)
         print(tokens)
         print(u'{} => {}'.format(doc.id, data["book"]))
-    
+
 
 def concat(arr1, arr2):
     for element in arr2:
@@ -47,8 +50,8 @@ def concat(arr1, arr2):
 
 
 def main():
-    addToken([array, array2])
-    readTokens()
+    add_tokens([array, array2])
+    get_indexer()
 
 
 if __name__ == "__main__":

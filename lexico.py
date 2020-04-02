@@ -8,13 +8,14 @@ from nltk.corpus import stopwords
 from nltk.corpus import brown
 from tokenWords import tag
 from nltk.stem import PorterStemmer 
+from firebase import add_tokens
 
 # INIT-----------
 # STOPWORDS
 
 stop_words = set(stopwords.words('english'))
-dbToken = list()
-userTokens = list()
+
+
 ps = PorterStemmer() 
 
 # API
@@ -102,8 +103,9 @@ def tokeneize(inp):
 
 
 def get_user_tokens(input):
+    userTokens = list()
     for token in tokeneize(input):
-        contains = findToken(token, userTokens)
+        contains = find_token(token, userTokens)
         if((type(contains) != int)):
             userTokens.append({
                 "value": token.value,
@@ -121,12 +123,13 @@ def get_user_tokens(input):
                 print("No exite, no hay")
                 pass
 
-    print(userTokens)
-    return 
+    # print(userTokens)
+    return userTokens
 
 def get_books_tokens(input):
+    dbToken = list()
     for token in tokeneize(input):
-        contains = findToken(token, dbToken)
+        contains = find_token(token, dbToken)
         if((type(contains) != int)):
             dbToken.append({
                 "value": token.value,
@@ -144,20 +147,45 @@ def get_books_tokens(input):
                 print("No exite, no hay")
                 pass
 
-    print(dbToken)
-    return []    
+    # print(dbToken)
+    return dbToken    
+
+def get_book_indexer(lista):
+    dbToken = list()
+    for token in tokeneize(lista):
+        contains = find_token(token, dbToken)
+        if((type(contains) != int)):
+            dbToken.append({
+                "value": token.value,
+                "count": 1,
+                "type": token.type,
+                "page": token.lineno,
+                "books": []
+            })
+        else:
+            try:
+                # print("Ya estaba")
+                # print(dbToken[contains])
+                dbToken[contains]["count"] += 1
+                pass
+            except ValueError:
+                print("No exite, no hay")
+                pass
+
+    # print(dbToken)
+    return dbToken       
 
 def compareIndexers(indx1, indx2):
     empate = list()
     for token in indx1:
-        contains = findToken(token, indx2)
+        contains = find_token(token, indx2)
         if((type(contains) != int)):
             pass
         else:
             empate.append(token)
             # print("Token empatado {}".format(token["value"]))
     return empate
-def findToken(token, token_list):
+def find_token(token, token_list):
     contains = False
     for (index, t) in enumerate(token_list):
         # print(index)
@@ -199,6 +227,11 @@ def get_book_reviews(review_widget):
     return reviews
 
 
+def upload_book_tokens(book_list):
+    for book in book_list:
+        dbTokens = get_books_tokens(book.words)
+        add_tokens()
+
 def main():
     # Build the lexer
     lexer = lex.lex()
@@ -207,10 +240,15 @@ def main():
     reviews = get_book_reviews(widget)
     raw = BeautifulSoup(str(reviews[5]), 'xml')
     print(raw.get_text())
-    # tokeneize(raw.get_text())
-    get_books_tokens(raw.get_text())
-    get_user_tokens(sys.argv[2])
-    print(compareIndexers( dbToken, userTokens))
+
+
+    # dbTokens = get_books_tokens(raw.get_text())
+
+
+    userTokens = get_user_tokens(sys.argv[2])
+    print(userTokens)
+    
+    # print(compareIndexers( dbTokens, userTokens))
 
     print("""
     Carmen Robles
