@@ -231,19 +231,48 @@ def get_book_reviews(review_widget):
     reviews = soup.find_all('div', class_='gr_review_text')
     return reviews
 
+def sortBook(book):
+    return book["count"]
+
+def add_indexed_books(new_books, books):
+
+    
+    for new_book in new_books:
+        contains_book = -1
+        for (current_id, current_book) in enumerate(books):
+            if(new_book["title"] == current_book["title"]):
+                contains_book = current_id
+                books[current_id]["count"] += new_book["count"]
+            else:
+                pass    
+        if(contains_book == -1):
+            books.append(new_book)
+    return books
 
 def get_books_from_indexer(user_tokens, indexer):
     books = list()
     # user_token is type:
-    # 
+    #
     # {"value": "palabra",
     # "count": 1,
     # "type": "ADV",
     # "page": 3,}
+    #
+    # word_token is type:
     # 
-    # for user_token in user_tokens:
-    #     for word_index in indexer:
-    #         if()
+    # 'word': word,
+    # 'books': [{
+    #     'title': book["title"],
+    #     'genre': book["genre"],
+    #     'count': 1
+    # }]
+    # 
+
+    for user_token in user_tokens:
+        for word_index in indexer:
+            if(user_token["value"] == word_index["word"]):
+                books = add_indexed_books(word_index["books"], books)
+    return books
 
 def add_to_indexer(word, book, indexer):
     contains_word = -1
@@ -316,12 +345,12 @@ def build_book_indexer():
 
             except KeyError:
                 pass
-    print(indexer)
+    # print(indexer)
     return indexer
 
 
-def upload_book_tokens():
-    with open('most.json') as json_data:
+def upload_book_tokens(file_name):
+    with open('{}.json'.format(file_name)) as json_data:
         data = json.load(json_data)
 
         for genre, books in data.items():
@@ -340,34 +369,47 @@ def upload_book_tokens():
                     dbTokens = get_books_tokens(raw.get_text())
                     reviews_token_list.append(dbTokens)
 
-                print(book)
-                print(reviews_token_list)
-                print("")
+                # print(book)
+                # print(reviews_token_list)
+                # print("")
                 add_tokens({'genre': genre,
                             'title': book,
                             'tokenListCount': len(reviews_token_list)
                             },
                            reviews_token_list)
 
+def print_books(books):
+    for book in books:
+        print("{} <<{}>> : {}".format(book["title"], book["genre"], book["count"]))
 
 def main():
     # Build the lexer
     lexer = lex.lex()
-    # upload_book_tokens()
-    build_book_indexer()
-    # dbTokens = get_books_tokens(raw.get_text())
+    # If you need to upload some data, uncomment line below
+    # upload_book_tokens("most")
+    # upload_book_tokens("10most") #Este va a tardar mucho porque son muchos libros que tiene que subir
+    # First we build our indexer from DB
+    indexer = build_book_indexer()
+    print("Indexer ready")
+    # Then we process the input from user and make it a token array
+    userTokens = get_user_tokens(sys.argv[1])
+    print("Input analizado")
+    # Finally we just search for each user token on aour indexer
+    # we return a list of books that fits better for user
+    # (that contains more words the user said)
 
-    # userTokens = get_user_tokens(sys.argv[2])
-    # print(userTokens)
+    books = get_books_from_indexer(userTokens, indexer)
+    books.sort(key = sortBook, reverse = True)
+    print("Books")
+    print_books(books)
 
-    # print(compareIndexers( dbTokens, userTokens))
-    # print("""
-    # Carmen Robles
-    # Alberto Calleja
-    # Felipe Enriquez
-    # Mauricio Araujo
-    # Noe Osorio
-    # """)
+    print("""
+    Carmen Robles
+    Alberto Calleja
+    Felipe Enriquez
+    Mauricio Araujo
+    Noe Osorio
+    """)
 
 
 if __name__ == "__main__":
