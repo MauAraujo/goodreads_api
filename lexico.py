@@ -1,5 +1,9 @@
+# export GOOGLE_APPLICATION_CREDENTIALS="/home/mau/Documents/School/Recuperación de la Información/goodreads_api/ROBI-216445bc5e4f.json"
 import ply.lex as lex
+import re
+import json
 from bs4 import BeautifulSoup
+from google.cloud import firestore
 import requests
 import sys
 import nltk
@@ -13,10 +17,10 @@ from tokenWords import tag
 stop_words = set(stopwords.words('english'))
 
 # API
-title = sys.argv[1]
+# title = sys.argv[1]
 key = 'rwBv0LS4tFZO1J7OAzkQeg'
 secret = 'LwzOepiqH4CNXOoAT7NeFEvUdv6yqPPniL97IYUFM'
-
+db = firestore.Client()
 
 tokens = ['WORD', "PUNCTUATION", "DIGIT", 'NUMBER', "LETTER"]
 
@@ -61,35 +65,36 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-
-
 lexer = lex.lex()
 
 
 # Tokenize
 
 
-def tokeneize(inp):
+def tokeneize(inp, ref):
     lexer.input(inp.lower())
-
-    for index in range(0,lexer.lexlen):
+    tokens = []
+    for index in range(0, lexer.lexlen):
         try:
             tok = lexer.token()
             if tok.type != "PUNCTUATION":
                 tok.type = tag(str(tok.value))
             if not tok:
                 break      # No more input
-            if tok.value not in stop_words:
-                print("{} : {} => Linea {}".format(str(tok.value), tok.type, str(tok.lineno)))
-                # print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))  
+            if tok.value not in stop_words and (tok.type == "NOUN" or tok.type == "ADJ" or tok.type == "ADV" or tok.type == "ADP" or tok.type == "VERB"):
+                print(ref.id)
+                db.collection(f"books/{ref.id}/tokens").add({
+                    'token': tok.value
+                })
+                # print("{} : {} => Linea {}".format(str(tok.value), tok.type, str(tok.lineno)))
+                # print(str(tok.value) + " \t\t: " + tok.type + " \t\tLinea: " + str(tok.lineno))
             # else:
                 # print(str(tok.value) + " \t\t: " + "STOPWORD" + " \t\tLinea: " + str(tok.lineno))
         except AttributeError:
             # print("Error en atributo de {} : {}".format(tok.value, tok.type))
             pass
 
-
-def get_book_id():
+def get_book_id(title):
     r = requests.get(
         f'https://www.goodreads.com/book/title.xml?key={key}&title={title}')
     soup = BeautifulSoup(r.text, 'xml')
@@ -114,19 +119,31 @@ def get_book_reviews(review_widget):
 def main():
     # Build the lexer
     lexer = lex.lex()
-    id = get_book_id()
-    widget = get_book_widget(id)
-    reviews = get_book_reviews(widget)
-    raw = BeautifulSoup(str(reviews[5]), 'xml')
-    print(raw.get_text())
-    tokeneize(raw.get_text())
-    print("""
-    Carmen Robles
-    Alberto Calleja
-    Felipe Enriquez
-    Mauricio Araujo
-    Noe Osorio
-    """)
+    with open('10most.json') as json_data:
+        data = json.load(json_data)
+
+    for genre, books in data.items():
+        for book in books:
+            print(genre, book)
+            id = get_book_id(book)
+            widget = get_book_widget(id)
+            reviews = get_book_reviews(widget)
+            ref = db.collection('books').add({
+                'genre': genre,
+                'title': book,
+            })
+            for review in reviews:
+                raw = BeautifulSoup(str(review), 'xml')
+                tokeneize(raw.get_text(), ref[1])
+
+    # print("""
+    # Carmen Robles
+    # Alberto Calleja
+    # Felipe Enriquez
+    # Mauricio Araujo
+    # Noe Osorio
+    # """)
+
 
 if __name__ == "__main__":
     main()
