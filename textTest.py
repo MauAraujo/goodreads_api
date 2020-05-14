@@ -1,46 +1,4 @@
 test = """
-    Es una de las enfermeras que en estos días luchan sin tregua contra el coronavirus. Una de tantas, dice con humildad. Por eso, pide no tener nombre ni apellido. Sería demasiado protagonismo, asegura. Trabaja en dos frentes: atendiendo a las personas sin hogar, especialmente vulnerables y, después, siempre corriendo, casi sin aliento, yéndose a un hospital para combatir el Covid-19. En primera línea y sin descanso. Para eso la han contratado. La primera sanitaria que falleció en España por coronavirus era una enfermera del hospital de Galdakao (Vizcaya).
-
-Los sanitarios temen que la falta de equipos de protección contribuya a la expansión del coronavirusLos sanitarios temen que la falta de equipos de protección contribuya a la expansión del coronavirus
-
-El coronavirus diezma a los profesionales sanitarios: "Están cayendo muchísimos"
-
-Para hacer frente a la epidemia en una planta especialmente habilitada de un hospital público de Madrid, la ciudad más azotada de España. "Como otras tantas compañeras. No tiene mérito", apostilla. Es una chicarrona del Norte, capaz de aguantarlo todo. Vocacional y entregada. Acostumbrada a contratos eventuales. A darlo todo en tiempos cortos, pero intensos. Hoy está rota.Lo cuenta en primera persona a Vozpópuli. Verbalizar todo lo que está sintiendo, viviendo y sufriendo, confiesa, le ha valido de terapia.
-
-Suena el despertador...
-
-Suena el despertador. Tengo la sensación de haber dormido poco y mal, como si desde que empezó esta locura todos los días fueran iguales. Como estar viviendo un mal sueño.
-
-El café en mi cocina me sabe a gloria, como si fuera la pócima perfecta que me dará la energía suficiente para el turno. Sé bien que será lo único que entre en mi cuerpo hasta que vuelva a casa. También desde hace días tengo el estomago cerrado. Sin ganas de comer. En estado de alerta 24 horas. Sin descanso.
-
-Canto muy alto, como si cantando pudiera vencer; sentirme poderosa con mi voz, lo contrario de lo que siento cuando cruzo las puertas de la planta
-
-Me monto en el coche y conduzco hacia el hospital por calles vacías, solitarias, sin apenas ruido. Pongo música, muy alta y canto muy alto, como si cantando pudiera vencer; sentirme poderosa con mi voz, lo contrario de lo que me siento cuando cruzo las puertas de la planta. La música siempre salva, y sana, aunque sea a una pobre enfermera que se engaña pensando que esta mañana será mejor.
-
-Sabes que te puede la situación, que haces lo que puedes, que priorizas cuidados y que eso es sumamente doloroso 
-
-Llego a la planta y veo las caras de mis compañeras de noche, agotadas del turno y de las semanas que llevamos trabajando sin descanso. Se repite cada día lo mismo, una lucha contrarreloj y sin descanso por atender bien a nuestros pacientes, pero sabes que te puede la situación, que haces lo que puedes, que priorizas cuidados y que eso es sumamente doloroso.
-
-Hay que estar en las habitaciones el menor tiempo posible, porque la carga de trabajo no lo permite, y porque con un EPI debes pasar un tiempo limitado
-
-No voy a contar lo que ya sabéis, el EPI (equipo de protección individual) es una barrera de protección que nos hace señales, heridas y sudar hasta el desmayo, pero también es una barrera que te impide tocar, abrazar, consolar y pasar tiempo con tus enfermos.
-
-Hay que estar en las habitaciones el menor tiempo posible, porque la carga de trabajo no lo permite, y porque con un EPI debes pasar un tiempo limitado, haciendo lo mas importante de cada paciente.
-
-Saber que hay cuidados que no puedes dar a tus pacientes duele más que las úlceras de la nariz que producen la mascarilla y las gafas durante 8-10 horas
-
-Seguimos priorizando y luchando contra el reloj, contra el aguante de nuestros cuerpos  y contra esa profesionalidad que te hace saber que hay cuidados y atenciones que no puedes dar a tus pacientes. Creedme que eso duele mas que las úlceras de la nariz que produce la mascarilla y las gafas durante 8-10 horas.
-
-En cada turno veo mujeres que se rompen cuando nadie las ve, que lloran y se mueren de miedo; compañeras que dicen: "ya no puedo más" y que al minuto están con el EPI pasillo arriba, pasillo abajo, con una energía y una profesionalidad que pone los pelos de punta.
-
-Qué orgullo de profesión, qué orgullo de ser mujer y de pertenecer a este gremio maravilloso. Todas estamos comentando que lo mas difícil y lo más duro es no poder abrazar.
-
-Abrazar al paciente que sufre; abrazar al paciente en sus últimos momentos; abrazar a las familias y acompañarlas en su duelo; abrazar a las compañeras en esos pocos momentos en los que se rompen y lloran; abrazar a nuestros hijos, parejas, padres, amigas….
-
- 
-
-Texto en Inglés
-
  
 
 She's one of the nurses who are fighting the coronavirus relentlessly these days. One of many, she says with humility. That's why she asks not to have a name or surname. It would be too much of a protagonist, she says. She works on two fronts: attending to the homeless, who are especially vulnerable, and then, always running, almost out of breath, going to a hospital to fight Covid-19. On the front line and without rest. That's what she's been hired to do. The first health worker to die in Spain of coronavirus was a nurse at the hospital in Galdakao (Biscay).
