@@ -2,6 +2,7 @@ from urllib.request import urlopen
 from link_finder import LinkFinder
 from crawler_file_manager import *
 from domain import *
+from parser import *
 
 
 class Spider:
@@ -55,10 +56,17 @@ class Spider:
                 html_bytes = response.read()
                 html_string = html_bytes.decode("utf-8")
             finder = LinkFinder(Spider.base_url, page_url)
+
             finder.feed(html_string)
         except Exception as e:
             print(str(e))
             return set()
+        print("")    
+        # for page in finder.page_content():
+
+        #     print(page)   
+        parser = Parser()
+        append_index_to_file(Spider.project_name, Spider.base_url, parser.parse_html_tokens_to_string(html_string))    
         return finder.page_links()
 
     # Saves queue data to project files

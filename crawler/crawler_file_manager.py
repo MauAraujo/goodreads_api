@@ -11,6 +11,21 @@ def create_website_dir(directory):
         print("Error: creating file")
 
 
+def create_index_file(project_name, base_url):
+    name = os.path.join(project_name, "content")
+    print(name)
+    if not os.path.isfile(name):
+        
+        write_file(name, "INDEXER\n")
+def append_index_to_file(project_name, base_url, data):
+    create_index_file(project_name, base_url)
+    name = os.path.join(project_name, "content")
+    append_to_file(name, """
+    {}:
+    {}
+
+    """.format(base_url, data))
+
 # Create queue and crawled files (if not created)
 def create_data_files(project_name, base_url):
     queue = os.path.join(project_name, 'queue.txt')
