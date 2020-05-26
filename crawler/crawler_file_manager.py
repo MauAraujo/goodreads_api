@@ -19,7 +19,7 @@ def create_index_file(project_name, base_url):
         write_file(name, "INDEXER\n")
 def append_index_to_file(project_name, base_url, data):
     create_index_file(project_name, base_url)
-    name = os.path.join(project_name, "content")
+    name = os.path.join(project_name, "content.txt")
     append_to_file(name, """
     {}:
     {}
