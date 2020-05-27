@@ -66,7 +66,7 @@ class Spider:
 
         #     print(page)   
         parser = Parser()
-        append_index_to_file(Spider.project_name, Spider.base_url, parser.parse_html_tokens_to_string(html_string))    
+        append_index_to_file(Spider.project_name, page_url, parser.parse_html_tokens_to_string(html_string))    
         return finder.page_links()
 
     # Saves queue data to project files
